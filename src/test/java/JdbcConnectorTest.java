@@ -12,8 +12,12 @@ class JdbcConnectorTest {
 
     @Test
     @DisplayName("커넥션 확인")
-    void checkConnection() throws SQLException {
+    void checkConnection() throws SQLException, ClassNotFoundException {
         jdbcConnector.checkConnection();
+
+        Class s = Class.forName("JpaImpl");
+        System.out.println(s);
     }
+
 
 }
