@@ -3,12 +3,10 @@ package entity;
 import core.Entity;
 import core.Id;
 
-@Entity
+@Entity(tableName = "member")
 public class Member {
-
     @Id
     private Long id;
 
-    Member() {}
-
+    protected Member() {}
 }

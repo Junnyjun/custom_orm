@@ -1,3 +1,4 @@
+import jdbc.JdbcConnector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ class JdbcConnectorTest {
     void checkConnection() throws SQLException, ClassNotFoundException {
         jdbcConnector.checkConnection();
 
-        Class s = Class.forName("JpaImpl");
+        Class s = Class.forName("lib.JpaImpl");
         System.out.println(s);
     }
 

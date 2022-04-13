@@ -1,14 +1,15 @@
+package jdbc;
+
 import java.sql.*;
 
 public class JdbcConnector {
 
     private Connection conn  = null;
-    private final String url = "jdbc:mysql://localhost:3306/orm-db";
-    private final String id = "codekata";
-    private final String password= "12345";
+    private final String url = "jdbc:mysql://localhost:3306/junny";
+    private final String id = "junny";
+    private final String password= "1234";
 
     public JdbcConnector() throws ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
         try{
             this.conn = DriverManager.getConnection(url,id,password);
         }catch (SQLException e){

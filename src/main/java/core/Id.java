@@ -8,4 +8,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Id {
+
 }
+//    Class c = Class.forName(classNameWithPackage);
+//    Field[] fields = c.getDeclaredFields();
+//
+//        for (Field field : fields) {
+//                if (!field.isAnnotationPresent(Id.class)) {
+//        throw new RuntimeException("Id Annotaion Required!");
+//        }
+//        }
