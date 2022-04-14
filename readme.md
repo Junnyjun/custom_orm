@@ -18,7 +18,7 @@
  ㄴ 클래스에서 어떤 값을 어노테이션&리플렉션 으로 찾아오는건 생각보다 괴롭다.  
  ㄴ 저기서 선언한걸 사용하지않고 구현체에서 리플렉션을 돌려서 어노테이션을 찾아오고  
  "" 값일 경우에 따로 조치를 취해주는 식으로 한다면 없거나 있거나.  
- A. talbeName이 있을경우 -> 그냥 쓰고  
+ A. tableName이 있을경우 -> 그냥 쓰고  
  B. tableName이 blank -> true 리플렉션의 getSimpleName 사용한다.  
 4. Impl을 구현해서 jdbc랑 연동시키면, 1차캐시 부분까지는 연동이 가능할거 같다.  
 
@@ -28,7 +28,7 @@
 - 환경 정보
 
 ```bash
-$docker pull nginx
+$docker pull mysql
 $docker \
   run \
   --detach \

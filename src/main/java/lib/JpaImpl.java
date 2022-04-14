@@ -2,8 +2,8 @@ package lib;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class JpaImpl<DTO extends  Object> implements JpaRepository<M, Number> {
-    private final ConcurrentHashMap<DTO,Long> data = new ConcurrentHashMap<>();
+public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
+    private final ConcurrentHashMap<ENTITY,ID> data = new ConcurrentHashMap<>();
     private static JpaImpl instance = new JpaImpl();
 
 

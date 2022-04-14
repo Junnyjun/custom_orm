@@ -11,7 +11,7 @@ public class Main {
         idFieldValidation("entity.Member");
     }
 
-    private static void idFieldValidation(String classNameWithPackage) throws ClassNotFoundException, NoSuchMethodException {
+    private static void idFieldValidation(String classNameWithPackage) throws ClassNotFoundException {
         Class c = Class.forName(classNameWithPackage);
         String simpleName = c.getSimpleName();
         Method[] declaredMethods = c.getDeclaredMethods();
