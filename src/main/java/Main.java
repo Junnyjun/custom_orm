@@ -1,19 +1,20 @@
 import core.Entity;
 import jdbc.JdbcConnector;
-import lib.MemberRepositoryImpl;
+import lib.JpaImpl;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException {
-        JdbcConnector jdbcConnector = new JdbcConnector();
+//        JdbcConnector jdbcConnector = new JdbcConnector();
+        JpaImpl.getInstance().findAll();
 //        idFieldValidation("entity.Member");
 
-        MemberRepositoryImpl.getInstance().findAll();
+//        MemberRepositoryImpl.getInstance().findAll();
     }
 
-    private static void idFieldValidation(String classNameWithPackage) throws ClassNotFoundException, NoSuchMethodException {
+    private static void idFieldValidation(String classNameWithPackage) throws ClassNotFoundException {
         Class c = Class.forName(classNameWithPackage);
         String simpleName = c.getSimpleName();
         Method[] declaredMethods = c.getDeclaredMethods();

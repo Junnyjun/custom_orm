@@ -1,6 +1,7 @@
 package jdbc;
 
 import java.sql.*;
+import java.util.List;
 
 public class JdbcConnector {
 
@@ -26,6 +27,12 @@ public class JdbcConnector {
             String result = rs.getString("1");
             System.out.println("result allways 1 : "+ result);
         }
-
     }
+
+    public ResultSet selectAll(String query) throws SQLException {
+        PreparedStatement pstmt = null;
+        pstmt = conn.prepareStatement(query);
+        return pstmt.executeQuery();
+    }
+
 }
