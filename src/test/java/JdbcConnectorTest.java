@@ -16,7 +16,7 @@ class JdbcConnectorTest {
     void checkConnection() throws SQLException, ClassNotFoundException {
         jdbcConnector.checkConnection();
 
-        Class s = Class.forName("lib.JpaImpl");
+        Class s = Class.forName("lib.MemberRepositoryImpl");
         System.out.println(s);
     }
 
