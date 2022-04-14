@@ -1,14 +1,16 @@
 import core.Entity;
 import jdbc.JdbcConnector;
+import lib.MemberRepositoryImpl;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException {
         JdbcConnector jdbcConnector = new JdbcConnector();
-        idFieldValidation("entity.Member");
+//        idFieldValidation("entity.Member");
+
+        MemberRepositoryImpl.getInstance().findAll();
     }
 
     private static void idFieldValidation(String classNameWithPackage) throws ClassNotFoundException, NoSuchMethodException {
