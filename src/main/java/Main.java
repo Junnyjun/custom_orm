@@ -2,11 +2,14 @@ import core.Entity;
 import jdbc.JdbcConnector;
 import lib.JpaImpl;
 
+import java.beans.IntrospectionException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IntrospectionException, SQLException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchFieldException {
 //        JdbcConnector jdbcConnector = new JdbcConnector();
         JpaImpl.getInstance().findAll();
 //        idFieldValidation("entity.Member");

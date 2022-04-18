@@ -1,13 +1,15 @@
 package lib;
-
 import core.Entity;
 import entity.Member;
 import jdbc.JdbcConnector;
 import utils.EntityExtractor;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -37,17 +39,18 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
     }
 
     @Override
-    public List<Entity> findAll() {
+    public List<Entity> findAll() throws IntrospectionException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, InstantiationException, NoSuchFieldException {
         // 쿼리 생성기로 쪼개야됨
         String tableName = EntityExtractor.getTableNameFromEntity(c);
         Field[] fields = Member.class.getDeclaredFields();
+
         StringBuilder queryBuilder = new StringBuilder("select").append(" ");
         List<String> queryFieldList = Collections.synchronizedList(new ArrayList<>());
         queryBuilder.append(
-            Arrays.stream(fields).map(field -> {
-                queryFieldList.add(field.getName());
-                return field.getName();
-            }).collect(Collectors.joining(", "))
+                Arrays.stream(fields).map(field -> {
+                    queryFieldList.add(field.getName());
+                    return field.getName();
+                }).collect(Collectors.joining(", "))
         );
         queryBuilder.append(" from ").append(tableName);
         System.out.println(queryBuilder.toString());
@@ -56,24 +59,50 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
             JdbcConnector jdbcConnector = new JdbcConnector();
             ResultSet rs = jdbcConnector.selectAll(queryBuilder.toString());
 
-            while(rs.next()) {
+            while (rs.next()) {
                 for (String field : queryFieldList) {
                     System.out.println(rs.getString(field));
                 }
             }
 
-//            Constructor<?> constructor = c.getDeclaredConstructor(new Class[]{Long.class, String.class});
+
+            // 실험중
+            Class[] type = {String.class};
+            Class classDefinition = Class.forName("entity.Member");
+
+            Class[] type1 = new Class[fields.length];
+            type1[0] = Long.class;
+            type1[1] = String.class;
+
+//            for (int i = 0; i < fields.length; i++) {
+//                type1[0] = fields[i].getType().getClass();
+//            }
+
+
+
+            Member member12 = new Member();
+            PropertyDescriptor pd;
+//            pd = new PropertyDescriptor(/, Object.class);
+//            pd.getWriteMethod().invoke(member12, "id", "1");
+//            pd = new PropertyDescriptor("name", Member.class);
+//            Member result =  (Member) pd.getWriteMethod().invoke(member12, "name", "test");
+//            Method setter = pd.getWriteMethod();
+            Field idField = c.getClass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.trySetAccessible();
+            idField.set(member12,1L);
+            idField.set(Long.class,1L);
+//            Field field = pd.getPropertyEditorClass().getField("name");
+//            setter.setAccessible(true);
+
             Constructor<?> constructor = c.getDeclaredConstructor();
-            Member o = (Member) constructor.newInstance(1L, "kim");
+            Member o = (Member) constructor.newInstance(1, "test");
             System.out.println("test!");
 
-        } catch (ClassNotFoundException | SQLException | NoSuchMethodException e) {
-            e.getStackTrace();
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+            return null;
+        } finally {
 
-        return null;
+        }
     }
 
     @Override
