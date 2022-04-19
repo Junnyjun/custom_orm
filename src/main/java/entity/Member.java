@@ -6,8 +6,12 @@ import core.Id;
 @Entity(name = "member")
 public class Member {
     @Id
-    private Long id;
+    private long id;
     private String name;
 
-    protected Member() {}
+    public Member() {}
+
+    public long getId() {
+        return id;
+    }
 }

@@ -64,12 +64,23 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
 
 //            Constructor<?> constructor = c.getDeclaredConstructor(new Class[]{Long.class, String.class});
             Constructor<?> constructor = c.getDeclaredConstructor();
-            Member o = (Member) constructor.newInstance(1L, "kim");
-            System.out.println("test!");
+//            Member o = (Member) constructor.newInstance(1L, "kim");
+            constructor.setAccessible(true);
+            Member o = (Member) constructor.newInstance();
+            Field idField = o.getClass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(o, 2L);
+            idField.setAccessible(false);
 
-        } catch (ClassNotFoundException | SQLException | NoSuchMethodException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.getStackTrace();
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
 
