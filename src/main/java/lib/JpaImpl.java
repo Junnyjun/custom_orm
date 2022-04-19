@@ -65,44 +65,21 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
                 }
             }
 
-
-            // 실험중
-            Class[] type = {String.class};
-            Class classDefinition = Class.forName("entity.Member");
-
-            Class[] type1 = new Class[fields.length];
-            type1[0] = Long.class;
-            type1[1] = String.class;
-
-//            for (int i = 0; i < fields.length; i++) {
-//                type1[0] = fields[i].getType().getClass();
-//            }
-
-
-
-            Member member12 = new Member();
-            PropertyDescriptor pd;
-//            pd = new PropertyDescriptor(/, Object.class);
-//            pd.getWriteMethod().invoke(member12, "id", "1");
-//            pd = new PropertyDescriptor("name", Member.class);
-//            Member result =  (Member) pd.getWriteMethod().invoke(member12, "name", "test");
-//            Method setter = pd.getWriteMethod();
-            Field idField = c.getClass().getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.trySetAccessible();
-            idField.set(member12,1L);
-            idField.set(Long.class,1L);
-//            Field field = pd.getPropertyEditorClass().getField("name");
-//            setter.setAccessible(true);
-
             Constructor<?> constructor = c.getDeclaredConstructor();
-            Member o = (Member) constructor.newInstance(1, "test");
-            System.out.println("test!");
+            constructor.setAccessible(true);
+            Member o = (Member) constructor.newInstance();
+            Field idField = o.getClass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(o, 2L);
+            idField.setAccessible(false);
 
-            return null;
-        } finally {
-
+        } catch (ClassNotFoundException | SQLException e) {
+            e.getStackTrace();
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchFieldException | InstantiationException | NoSuchMethodException e) {
+            e.printStackTrace();
         }
+
+        return null;
     }
 
     @Override
