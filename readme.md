@@ -24,6 +24,9 @@
 
 
 
+###TODO
+1. yaml 작성
+2. Annotation Processor - Entity와 Id는 공존해야한다.
 
 - 환경 정보
 
