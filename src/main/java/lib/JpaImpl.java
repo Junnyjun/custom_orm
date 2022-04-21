@@ -61,14 +61,17 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
             // 엔티티는 여기다가
             List data = new LinkedList();
             while (rs.next()) { // 1,kim,2,Lee
-                Member member = new Member();
+                Constructor<?> constructor = clazz.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                Member entity = (Member) constructor.newInstance();
+
                 for (String field : queryFieldList) {
-                    Field idField = clazz.getClass().getDeclaredField(field);
+                    Field idField = entity.getClass().getDeclaredField(field);
                     idField.setAccessible(true);
-                    idField.trySetAccessible();
-                    idField.set(Object.class,rs.getString(field));
+                    idField.set(String.class, rs.getString(field));
+                    idField.setAccessible(false);
                 }
-                data.add(member); // size -> 4 1,null null,kim 2,null ...
+                data.add(entity); // size -> 4 1,null null,kim 2,null ...
             }
             System.out.println(data.toString());
 

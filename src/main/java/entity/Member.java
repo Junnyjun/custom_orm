@@ -6,12 +6,12 @@ import core.Id;
 @Entity(name = "member")
 public class Member {
     @Id
-    private long id;
+    private String id;
     private String name;
 
     public Member() {}
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 }
