@@ -6,6 +6,7 @@ import utils.EntityExtractor;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -39,7 +40,7 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
     }
 
     @Override
-    public List<Entity> findAll() throws IntrospectionException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, InstantiationException, NoSuchFieldException {
+    public List<Entity> findAll() throws IntrospectionException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, InstantiationException, NoSuchFieldException, FileNotFoundException {
         // 쿼리 생성기로 쪼개야됨
         String tableName = EntityExtractor.getTableNameFromEntity(c);
         Field[] fields = Member.class.getDeclaredFields();

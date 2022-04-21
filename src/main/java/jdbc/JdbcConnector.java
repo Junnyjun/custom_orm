@@ -1,18 +1,17 @@
 package jdbc;
 
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.List;
 
 public class JdbcConnector {
 
     private Connection conn  = null;
-    private final String url = "jdbc:mysql://localhost:3306/junny";
-    private final String id = "junny";
-    private final String password= "1234";
 
-    public JdbcConnector() throws ClassNotFoundException {
+    public JdbcConnector() throws ClassNotFoundException, FileNotFoundException {
         try{
-            this.conn = DriverManager.getConnection(url,id,password);
+            DataSourceValue value = Reader.getYaml();
+           this.conn = DriverManager.getConnection(value.getUrl(),value.getId(),value.getPassword());
         }catch (SQLException e){
             e.printStackTrace();
         }
