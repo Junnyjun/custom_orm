@@ -8,12 +8,12 @@ public class JdbcConnector {
 
     private Connection conn  = null;
 
-    public JdbcConnector() throws ClassNotFoundException, FileNotFoundException {
+    public JdbcConnector() throws ClassNotFoundException, FileNotFoundException, SQLException {
         try{
             DataSourceValue value = Reader.getYaml();
            this.conn = DriverManager.getConnection(value.getUrl(),value.getId(),value.getPassword());
         }catch (SQLException e){
-            e.printStackTrace();
+            throw new SQLException("DATASOURCE WRONG");
         }
     }
     public void checkConnection() throws SQLException {

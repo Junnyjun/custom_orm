@@ -15,9 +15,9 @@ public class Main {
 //        Reader reader = new Reader();
 //        reader.getYaml();
 
-//        JdbcConnector jdbcConnector = new JdbcConnector();
-//        JpaImpl.getInstance().findAll();
-//        idFieldValidation("entity.Member/**/");
+        JdbcConnector jdbcConnector = new JdbcConnector();
+        JpaImpl.getInstance().findAll();
+        idFieldValidation("entity.Member/**/");
 
 //        MemberRepositoryImpl.getInstance().findAll();
     }

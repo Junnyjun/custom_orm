@@ -9,7 +9,7 @@ import java.sql.SQLException;
 class JdbcConnectorTest {
     JdbcConnector jdbcConnector = null;
     @BeforeEach
-    void setup() throws ClassNotFoundException, FileNotFoundException {
+    void setup() throws ClassNotFoundException, FileNotFoundException, SQLException {
         this.jdbcConnector = new JdbcConnector();
     }
 

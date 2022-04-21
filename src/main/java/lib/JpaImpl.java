@@ -5,12 +5,10 @@ import jdbc.JdbcConnector;
 import utils.EntityExtractor;
 
 import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -19,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
     private final ConcurrentHashMap<ENTITY,ID> data = new ConcurrentHashMap<>();
-    private final Class<?> c;
+    private final Class<?> clazz;
     private static JpaImpl instance;
 
     static {
@@ -27,8 +25,8 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
         catch (Exception e) {throw new RuntimeException("JPA LOAD FAILED");}
     }
 
-    public JpaImpl(Class<?> c) {
-        this.c = c;
+    public JpaImpl(Class<?> clazz) {
+        this.clazz = clazz;
     }
     public static JpaImpl getInstance(){
         return JpaImpl.instance;
@@ -42,7 +40,7 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
     @Override
     public List<Entity> findAll() throws IntrospectionException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, InstantiationException, NoSuchFieldException, FileNotFoundException {
         // 쿼리 생성기로 쪼개야됨
-        String tableName = EntityExtractor.getTableNameFromEntity(c);
+        String tableName = EntityExtractor.getTableNameFromEntity(clazz);
         Field[] fields = Member.class.getDeclaredFields();
 
         StringBuilder queryBuilder = new StringBuilder("select").append(" ");
@@ -66,6 +64,12 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
                 }
             }
 
+            Field idField = clazz.getClass().getDeclaredField();
+            idField.setAccessible(true);
+            idField.trySetAccessible();
+//            idField.set(member12,1L);
+            idField.set(Long.class,1L);
+
 
             // 실험중
             Class[] type = {String.class};
@@ -79,24 +83,16 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
             // 2. 필드수에  따라 알맞은 값을 넣는다.
 
 
-//            for (int i = 0; i < fields.length; i++) {
-//                type1[0] = fields[i].getType().getClass();
-//            }
-
 //            pd = new PropertyDescriptor(/, Object.class);
 //            pd.getWriteMethod().invoke(member12, "id", "1");
 //            pd = new PropertyDescriptor("name", Member.class);
 //            Member result =  (Member) pd.getWriteMethod().invoke(member12, "name", "test");
 //            Method setter = pd.getWriteMethod();
-            Field idField = c.getClass().getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.trySetAccessible();
-//            idField.set(member12,1L);
-            idField.set(Long.class,1L);
+
 //            Field field = pd.getPropertyEditorClass().getField("name");
 //            setter.setAccessible(true);
 
-            Constructor<?> constructor = c.getDeclaredConstructor();
+            Constructor<?> constructor = clazz.getDeclaredConstructor();
             Member o = (Member) constructor.newInstance(1, "test");
             System.out.println("test!");
 
