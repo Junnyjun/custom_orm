@@ -9,7 +9,7 @@ public class Member {
     private long id;
     private String name;
 
-    protected Member() {}
+    public Member() {}
 
     public long getId() {
         return id;

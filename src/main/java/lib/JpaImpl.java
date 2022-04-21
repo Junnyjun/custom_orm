@@ -58,17 +58,24 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
             JdbcConnector jdbcConnector = new JdbcConnector();
             ResultSet rs = jdbcConnector.selectAll(queryBuilder.toString());
 
-            while (rs.next()) {
+            // 엔티티는 여기다가
+            List data = new LinkedList();
+            while (rs.next()) { // 1,kim,2,Lee
+                Member member = new Member();
                 for (String field : queryFieldList) {
-                    System.out.println(rs.getString(field));
+                    Field idField = clazz.getClass().getDeclaredField(field);
+                    idField.setAccessible(true);
+                    idField.trySetAccessible();
+                    idField.set(Object.class,rs.getString(field));
                 }
+                data.add(member); // size -> 4 1,null null,kim 2,null ...
             }
+            System.out.println(data.toString());
 
-            Field idField = clazz.getClass().getDeclaredField();
-            idField.setAccessible(true);
-            idField.trySetAccessible();
-//            idField.set(member12,1L);
-            idField.set(Long.class,1L);
+            // 여기서 리스트로 뱉음
+            // Abdser1123 -> 객체 -> 리스트에 박음
+
+
 
 
             // 실험중
