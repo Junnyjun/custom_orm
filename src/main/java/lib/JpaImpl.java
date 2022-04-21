@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
+public class JpaImpl<ENTITY,ID,T extends Object> implements JpaRepository<ENTITY, ID> {
     private final ConcurrentHashMap<ENTITY,ID> data = new ConcurrentHashMap<>();
     private final Class<?> clazz;
     private static JpaImpl instance;
@@ -58,57 +58,31 @@ public class JpaImpl<ENTITY,ID> implements JpaRepository<ENTITY, ID> {
             JdbcConnector jdbcConnector = new JdbcConnector();
             ResultSet rs = jdbcConnector.selectAll(queryBuilder.toString());
 
-            // 엔티티는 여기다가
             List data = new LinkedList();
+            Constructor<?> constructor = clazz.getDeclaredConstructor();
+
+            constructor.setAccessible(true);
+
             while (rs.next()) { // 1,kim,2,Lee
-                Constructor<?> constructor = clazz.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                Member entity = (Member) constructor.newInstance();
+                T entity = <T> clazz.getClass().cast(constructor.newInstance());
 
                 for (String field : queryFieldList) {
                     Field idField = entity.getClass().getDeclaredField(field);
                     idField.setAccessible(true);
-                    idField.set(String.class, rs.getString(field));
+
+                    if(idField.getType().equals(Long.class)){
+                        idField.set(entity, rs.getLong(field));
+                    }else if(idField.getType().equals(String.class)){
+                        idField.set(entity, rs.getString(field));
+                    }
                     idField.setAccessible(false);
                 }
-                data.add(entity); // size -> 4 1,null null,kim 2,null ...
+                data.add(entity);
             }
-            System.out.println(data.toString());
+            return data;
 
-            // 여기서 리스트로 뱉음
-            // Abdser1123 -> 객체 -> 리스트에 박음
-
-
-
-
-            // 실험중
-            Class[] type = {String.class};
-            Class classDefinition = Class.forName("entity.Member");
-
-            Class[] type1 = new Class[fields.length];
-            type1[0] = Long.class;
-            type1[1] = String.class;
-
-            // 1. 최적화 해야한다
-            // 2. 필드수에  따라 알맞은 값을 넣는다.
-
-
-//            pd = new PropertyDescriptor(/, Object.class);
-//            pd.getWriteMethod().invoke(member12, "id", "1");
-//            pd = new PropertyDescriptor("name", Member.class);
-//            Member result =  (Member) pd.getWriteMethod().invoke(member12, "name", "test");
-//            Method setter = pd.getWriteMethod();
-
-//            Field field = pd.getPropertyEditorClass().getField("name");
-//            setter.setAccessible(true);
-
-            Constructor<?> constructor = clazz.getDeclaredConstructor();
-            Member o = (Member) constructor.newInstance(1, "test");
-            System.out.println("test!");
-
-            return null;
-        } finally {
-
+        }catch (Exception e){
+            throw new IllegalArgumentException("WRONG");
         }
     }
 

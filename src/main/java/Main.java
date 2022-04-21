@@ -1,4 +1,5 @@
 import core.Entity;
+import entity.Member;
 import jdbc.JdbcConnector;
 import jdbc.Reader;
 import lib.JpaImpl;
@@ -9,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IntrospectionException, SQLException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchFieldException, FileNotFoundException {
@@ -16,7 +18,9 @@ public class Main {
 //        reader.getYaml();
 
         JdbcConnector jdbcConnector = new JdbcConnector();
-        JpaImpl.getInstance().findAll();
+        List<Member> data  = JpaImpl.getInstance().findAll();
+
+
         idFieldValidation("entity.Member/**/");
 
 //        MemberRepositoryImpl.getInstance().findAll();
