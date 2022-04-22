@@ -8,18 +8,10 @@ import java.sql.SQLException;
 
 class JdbcConnectorTest {
     JdbcConnector jdbcConnector = null;
+
     @BeforeEach
-    void setup() throws ClassNotFoundException, FileNotFoundException, SQLException {
+    void setup() throws FileNotFoundException, SQLException {
         this.jdbcConnector = new JdbcConnector();
-    }
-
-    @Test
-    @DisplayName("커넥션 확인")
-    void checkConnection() throws SQLException, ClassNotFoundException {
-        jdbcConnector.checkConnection();
-
-        Class s = Class.forName("lib.MemberRepositoryImpl");
-        System.out.println(s);
     }
 
 
