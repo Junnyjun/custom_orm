@@ -1,6 +1,7 @@
 package jdbc;
 
 import javax.sql.DataSource;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +13,11 @@ public class MyDataSource implements DataSource {
     private final DataSourceValue value;
 
     public MyDataSource() {
-        this.value = new DataSourceValue();
+        try {
+            this.value = DataSourceResponse.dataSourceValue();
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("PROPERTIES IS WRONG");
+        }
     }
 
     @Override
