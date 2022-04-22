@@ -79,7 +79,8 @@ public class JpaImpl<ENTITY,ID,T extends Object> implements JpaRepository<ENTITY
     }
 
     @Override
-    public void save(Entity entity) {
+    public Optional<ENTITY> save(Entity entity) {
 
+        return null;
     }
 }

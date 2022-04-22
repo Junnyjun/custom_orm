@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface JpaRepository<ENTITY, ID> {
     Optional<Entity> findById(ID id);
     List<Entity> findAll() throws IntrospectionException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, InstantiationException, NoSuchFieldException, FileNotFoundException;
-    void save(Entity entity);
+    Optional<ENTITY> save(Entity entity);
 }
