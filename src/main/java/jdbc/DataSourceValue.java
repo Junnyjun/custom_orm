@@ -5,9 +5,6 @@ public class DataSourceValue {
     private String id;
     private String password;
 
-    public DataSourceValue() {
-    }
-
     public DataSourceValue(String url, String id, String password) {
         this.url = url;
         this.id = id;
