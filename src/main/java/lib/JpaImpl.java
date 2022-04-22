@@ -4,13 +4,9 @@ import entity.Member;
 import jdbc.JdbcConnector;
 import utils.EntityExtractor;
 
-import java.beans.IntrospectionException;
-import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -38,11 +34,9 @@ public class JpaImpl<ENTITY,ID,T extends Object> implements JpaRepository<ENTITY
     }
 
     @Override
-    public List<Entity> findAll() throws IntrospectionException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, SQLException, NoSuchMethodException, InstantiationException, NoSuchFieldException, FileNotFoundException {
-        // 쿼리 생성기로 쪼개야됨
+    public List<Entity> findAll(){
         String tableName = EntityExtractor.getTableNameFromEntity(clazz);
-        Field[] fields = Member.class.getDeclaredFields();
-
+        Field[] fields = clazz.getDeclaredFields();
         StringBuilder queryBuilder = new StringBuilder("select").append(" ");
         List<String> queryFieldList = Collections.synchronizedList(new ArrayList<>());
         queryBuilder.append(
@@ -52,19 +46,17 @@ public class JpaImpl<ENTITY,ID,T extends Object> implements JpaRepository<ENTITY
                 }).collect(Collectors.joining(", "))
         );
         queryBuilder.append(" from ").append(tableName);
-        System.out.println(queryBuilder.toString());
 
         try {
             JdbcConnector jdbcConnector = new JdbcConnector();
-            ResultSet rs = jdbcConnector.selectAll(queryBuilder.toString());
+            ResultSet rs = jdbcConnector.queryProvider(queryBuilder.toString());
 
-            List data = new LinkedList();
+            List data = new LinkedList<T>();
+
             Constructor<?> constructor = clazz.getDeclaredConstructor();
-
             constructor.setAccessible(true);
-
-            while (rs.next()) { // 1,kim,2,Lee
-                T entity = <T> clazz.getClass().cast(constructor.newInstance());
+            while (rs.next()) {
+                Object entity = constructor.newInstance();
 
                 for (String field : queryFieldList) {
                     Field idField = entity.getClass().getDeclaredField(field);
