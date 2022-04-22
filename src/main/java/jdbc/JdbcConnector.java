@@ -14,11 +14,10 @@ public class JdbcConnector {
     }
 
     public ResultSet queryProvider(String query){
-        try( Connection connection = dataSource.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(query);
-             ResultSet resultSet = pstmt.executeQuery();
-        ){
-            return resultSet;
+        try{
+            Connection connection = dataSource.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(query);
+           return pstmt.executeQuery();
         }catch (SQLException e){
             throw new IllegalArgumentException("SQL IS WRONG");
         }

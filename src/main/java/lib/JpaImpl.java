@@ -6,7 +6,9 @@ import utils.EntityExtractor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -21,7 +23,7 @@ public class JpaImpl<ENTITY,ID,T extends Object> implements JpaRepository<ENTITY
         catch (Exception e) {throw new RuntimeException("JPA LOAD FAILED");}
     }
 
-    public JpaImpl(Class<?> clazz) {
+    public JpaImpl(Class<Entity> clazz) {
         this.clazz = clazz;
     }
     public static JpaImpl getInstance(){
@@ -47,16 +49,15 @@ public class JpaImpl<ENTITY,ID,T extends Object> implements JpaRepository<ENTITY
         );
         queryBuilder.append(" from ").append(tableName);
 
+
         try {
+            List data = new ArrayList<ENTITY>();
             JdbcConnector jdbcConnector = new JdbcConnector();
+            Constructor<?> constructor = clazz.getDeclaredConstructor();
             ResultSet rs = jdbcConnector.queryProvider(queryBuilder.toString());
 
-            List data = new LinkedList<T>();
-
-            Constructor<?> constructor = clazz.getDeclaredConstructor();
-            constructor.setAccessible(true);
             while (rs.next()) {
-                Object entity = constructor.newInstance();
+                Object entity =  constructor.newInstance();
 
                 for (String field : queryFieldList) {
                     Field idField = entity.getClass().getDeclaredField(field);
@@ -73,9 +74,20 @@ public class JpaImpl<ENTITY,ID,T extends Object> implements JpaRepository<ENTITY
             }
             return data;
 
-        }catch (Exception e){
-            throw new IllegalArgumentException("WRONG");
+        }catch (SQLException e){
+            throw new IllegalArgumentException("SQL EXCEPTION ERROR");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
+        throw new IllegalArgumentException("ERROR");
     }
 
     @Override

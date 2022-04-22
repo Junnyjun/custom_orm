@@ -6,5 +6,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         List<Member> data  = JpaImpl.getInstance().findAll();
+
+        System.out.println(data.stream().toString());
     }
 }
