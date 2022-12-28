@@ -1,6 +1,4 @@
 ## CUSTOM ORM
-### 의의  
-JPA의 구동을 최대한 따라가는 느낌? 을 살릴 수 있도록
 나만의 ORM 만들기
 
 - 목표  
@@ -12,8 +10,6 @@ JPA의 구동을 최대한 따라가는 느낌? 을 살릴 수 있도록
 ### 이번(4/3week) TODO 리스트
 1. Annotation Processor - Entity와 Id는 공존해야한다.
 2. method 단위로 Lazy 로딩 하기.
-
-
 
 
 ### 환경 정보
